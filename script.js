@@ -1,6 +1,9 @@
 // alert("javascript is connected");
+console.log("script.js loaded");
 const products=[];
+
 products.push({
+    id:5,
     image:"images/headphones.jpg",
     name : "WirelessHeadphones",
     price    : 1900,
@@ -9,6 +12,7 @@ products.push({
     category : "Electronics",
 });
 products.push({
+    id:4,
     image:"images/headphones.jpg",
     name : "laptop",
     price    : 2900,
@@ -17,6 +21,7 @@ products.push({
     category : "Electronics",
 });
 products.push({
+    id:3,
     image:"images/headphones.jpg",
     name : "LED",
     price    : 29000,
@@ -25,6 +30,7 @@ products.push({
     category : "Electronics",
 });
 products.push({
+    id:2,
     image:"images/headphones.jpg",
     name : "LED",
     price    : 29000,
@@ -33,6 +39,7 @@ products.push({
     category : "Electronics",
 });
 products.push({
+    id:1,
     image:"images/headphones.jpg",
     name : "LED",
     price    : 29000,
@@ -40,7 +47,8 @@ products.push({
     reviews  : 17,
     category : "Electronics",
 });
-const cart=[];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
 for(const product of products){
     const card=document.createElement("div");
     const container=document.getElementById("product-container")
@@ -54,16 +62,25 @@ for(const product of products){
     
     `;
     const button=card.querySelector("button");
-    const quantity=0;
+    
     button.addEventListener("click",function(){
-        if(!cart.includes(product)){
-            quantity+=1;
+        console.log("BUTTON CLICKED:", product.name);
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const existingitem =cart.find(function(item){
+            return item.product.id === product.id;
+        });
+        if(existingitem){
+            existingitem.quantity++;
+            
+        }
+        else{
+            const quantity=1;
             cart.push({product,quantity});
         }
         // cart.push(product);
-        quantity+=1;
         
         console.log(cart);
+        localStorage.setItem("cart",JSON.stringify(cart));
     });
     container.appendChild(card);
     
