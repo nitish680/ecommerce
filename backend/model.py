@@ -46,7 +46,9 @@ class OrderItem(base):
 
 class Users(base):
     __tablename__="user"
-    id=Column(Integer,primary_key=True)
+    id=Column(Integer,primary_key=True,index=True)
     name=Column(String,nullable=False)
     email=Column(String,nullable=False,unique=True)
     phone_no=Column(String,nullable=False,unique=True)
+    password=Column(String,nullable=False,unique=True)
+    role=Column(String,default="customer",nullable=False)

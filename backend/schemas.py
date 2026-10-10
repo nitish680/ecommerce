@@ -39,3 +39,6 @@ class CreateUser(BaseModel):
     email:str
     phone_no:str
     password:str
+class login(BaseModel):
+    email:str
+    password:str
