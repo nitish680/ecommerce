@@ -20,7 +20,7 @@ class Product(base):
 
 class Order(base):
     __tablename__ = "orders"
-
+    customer_id=Column(Integer,ForeignKey("user.id"),nullable=True)
     order_id = Column(String, primary_key=True)
     customer_name = Column(String, nullable=False)
     address = Column(String, nullable=False)

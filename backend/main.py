@@ -89,7 +89,13 @@ def get_current_user(
             detail="Invalid or expired token"
         )
 
-
+def get_current_admin(user_id:int=Depends(get_current_user),db:Session=Depends(get_db)):
+    existing_user=db.query(model.Users).filter(model.Users.id==user_id).first()
+    if existing_user is None:
+        raise HTTPException(status_code=401,detail="user not found")
+    if existing_user.role.lower()!="admin":
+        raise HTTPException(status_code=403,detail="Admin acess required")
+    return existing_user
 @app.get("/protected")
 def protected_route(user_id: int = Depends(get_current_user)):
     return {
@@ -122,7 +128,7 @@ def allproducts(skip:int = Query(0,ge=0),limit:int =Query(10,ge=1,le=100),db:Ses
 
 
 @app.post('/add',response_model=schemas.ReturnProduct,status_code=status.HTTP_201_CREATED)
-def add_product(product:schemas.Product,db:Session=Depends(get_db)):
+def add_product(product:schemas.Product,db:Session=Depends(get_db),current_admin:model.Users=Depends(get_current_admin)):
     new_product=model.Product(
         
         name=product.name,
@@ -180,7 +186,7 @@ def register(user:schemas.CreateUser,db:Session=Depends(get_db)):
         "id":new_user.id
     }
 @app.post("/orders")
-def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
+def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db),user_id:int =Depends(get_current_user)):
 
     total_amount = 0
     order_items = []
@@ -210,6 +216,7 @@ def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
         order_items.append(order_item)
 
     new_order = model.Order(
+        customer_id=user_id,
         order_id=order.order_id,
         customer_name=order.customer_name,
         phone=order.phone,
@@ -298,6 +305,40 @@ def login(user:schemas.login,db:Session=Depends(get_db)):
         "message":"login successfully",
         "id":existing_user.id,
         "name":existing_user.name,
+        "role":existing_user.role,
         "token":token,
         "type":"bearer"
     }
+
+@app.get("/orders/history")
+def get_order_history(
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user)):
+    orders = (
+        db.query(model.Order)
+        .filter(model.Order.customer_id == user_id)
+        .order_by(model.Order.created_time.desc())
+        .all()
+    )
+
+    history = []
+
+    for order in orders:
+        history.append({
+            "order_id": order.order_id,
+            "customer_name": order.customer_name,
+            "created_time": order.created_time,
+            "total_amount": order.total_amount,
+            "status": order.status,
+            "items": [
+                {
+                    "product_id": item.product_id,
+                    "product_name": item.product.name,
+                    "quantity": item.quantity,
+                    "total": item.total
+                }
+                for item in order.items
+            ]
+        })
+
+    return {"orders": history}
