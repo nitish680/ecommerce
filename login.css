@@ -1,0 +1,91 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background: #f6f2ec;
+    color: #292929;
+}
+
+.login-container {
+    width: 90%;
+    max-width: 420px;
+    padding: 35px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.login-container h1 {
+    text-align: center;
+    margin-top: 0;
+    color: #5c4635;
+}
+
+.login-container h2 {
+    margin-bottom: 8px;
+}
+
+.login-container p {
+    color: #666;
+    line-height: 1.5;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#login-form label {
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+#login-form input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+#login-form input:focus {
+    outline: 2px solid #b7a18a;
+    border-color: transparent;
+}
+
+#login-form button {
+    margin-top: 12px;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #5c4635;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#login-form button:hover {
+    background: #463426;
+}
+
+#message {
+    overflow-wrap: anywhere;
+}
+
+.login-container > p:last-child {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.login-container a {
+    color: #5c4635;
+    font-weight: bold;
+}

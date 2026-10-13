@@ -7,18 +7,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 id="YourCart">Your Cart</h1>
-    <div id="product-container"></div>
+    <main>
+        <h1 id="YourCart">Your Cart</h1>
+        <div id="product-container"></div>
+        <div id="total"></div>
+        <div id="Proceed"></div>
+    </main>
 </body>
 <script>
     const savedcart=localStorage.getItem("cart");
     const cart = JSON.parse(savedcart) || [];
     console.log(cart);
+    let total=0;
+    const totalprice=document.createElement("h2");
+    const container=document.getElementById("product-container");
     for(const [index,item] of cart.entries()){
         const product=item.product;
         const card=document.createElement("div");
-        const container=document.getElementById("product-container");
         card.className ="product-card";
+        // add the remove button logic here 
+        
+        
+        
         card.innerHTML=`
         <img src="${product.image}">
         <h2>${product.name}</h2>
@@ -26,41 +36,99 @@
         <p>Price:${product.price}</p>
         <p class="quantity">Quantity:${item.quantity}</p>
         <button class="increase">+</button> 
-        <button class="decrease">-</button>`;
+        <button class="decrease">-</button>
+        <button class="remove">Remove</button>`;
         const increment=card.querySelector('.increase');
         const quantitytext=card.querySelector('.quantity');
         increment.addEventListener('click',function(){
             item.quantity++;
+            total+=product.price;
+            totalprice.textContent=`Total:${total}`;
             quantitytext.textContent=`Quantity:${item.quantity}`;
             localStorage.setItem("cart", JSON.stringify(cart));
+            
+            
         });
+            const removebutton = card.querySelector('.remove');
+        removebutton.addEventListener('click', function(){
 
+            const currentIndex = cart.indexOf(item);
+
+            cart.splice(currentIndex, 1);
+
+            card.remove();
+
+            total -= item.quantity * product.price;
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            if(cart.length === 0){
+
+                const finalresult = document.createElement("p");
+                finalresult.className="finalres";
+                finalresult.textContent = "The Cart Is Empty. Shop More";
+
+                container.appendChild(finalresult);
+
+                totalprice.remove();
+                proceedbutton.remove();
+
+            }
+            else{
+
+                totalprice.textContent = `TotalPrice: ${total}`;
+                }
+
+            });
+        
         const decrement=card.querySelector('.decrease');
         decrement.addEventListener("click", function(){
-
+            
             if(item.quantity == 1){
-
+                
                 const currentIndex = cart.indexOf(item);
-
+                
                 cart.splice(currentIndex, 1);
-
+                
                 card.remove();
-
+                total-=item.product.price;
+                totalprice.textContent=`Total:${total}`;
                 localStorage.setItem("cart", JSON.stringify(cart));
                 console.log(localStorage.getItem("cart"))
             }
             else{
                 item.quantity--;
-
+                
                 quantitytext.textContent = `Quantity:${item.quantity}`;
-
+                total-=item.product.price;
+                totalprice.textContent=`Total:${total}`;
                 localStorage.setItem("cart", JSON.stringify(cart));
             }
-
+            
+            // console.log(total);
         });
-        container.appendChild(card);
         
-        }
+        
+        container.appendChild(card);
+        total += product.price * item.quantity;
+    }
+    totalprice.textContent=`Total:${total}`;
+    const selecttotal=document.getElementById("total");
+    selecttotal.appendChild(totalprice);
+    // Create the checkout button
+    const Proceed=document.getElementById("Proceed")
+    const proceedbutton=document.createElement('button');
+    proceedbutton.textContent="Proceed to checkout";
+    Proceed.appendChild(proceedbutton);
+    proceedbutton.addEventListener("click",function(){
+        const cart=JSON.parse(localStorage.getItem("cart"))||[];
+            if (cart.length==0){
+                alert("your cart is empty!");
+                return;
+            }
+        window.location.href="checkout.html";
+    });
+        
     
         
     

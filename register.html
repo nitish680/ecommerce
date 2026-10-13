@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | ShopeSphere</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+    <div class="register-container">
+        <h1>ShopeSphere</h1>
+        <h2>Create Your Account</h2>
+        <p>Join ShopeSphere to start shopping.</p>
+
+        <form id="register-form">
+            <label for="name">Full Name</label>
+            <input
+                type="text"
+                id="name"
+                required
+                minlength="2"
+                maxlength="100"
+                placeholder="Enter your full name"
+            >
+
+            <label for="email">Email</label>
+            <input
+                type="email"
+                id="email"
+                required
+                placeholder="Enter your email"
+            >
+
+            <label for="phone_no">Phone Number</label>
+            <input
+                type="tel"
+                id="phone_no"
+                required
+                placeholder="Enter your phone number"
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                required
+                minlength="8"
+                placeholder="Create a password"
+            >
+
+            <button type="submit">Create Account</button>
+            <p id="message" role="status"></p>
+        </form>
+
+        <p>Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+
+    <script src="register.js"></script>
+</body>
+</html>

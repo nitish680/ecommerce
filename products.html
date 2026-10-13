@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Product Details</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #product-details {
+            width: 400px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        #product-details img {
+            width: 250px;
+            height: 250px;
+            object-fit: contain;
+        }
+
+        #product-details h2 {
+            margin: 15px 0;
+        }
+
+        #product-details p {
+            font-size: 18px;
+        }
+
+        #add-cart {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        #add-cart:hover{
+            background-color: rgb(115, 119, 119);
+        }
+        #product{
+            display: flex;
+            gap: 50px;
+            justify-content: center;
+            align-items:center;
+        }
+        #product-image{
+            width: 400px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Product Details</h1>
+    <div id="product">
+        <div id="product-image"></div>
+
+        <div id="product-details"></div>
+    </div>
+
+    <!-- Your existing JavaScript -->
+    <script src="script.js"></script>
+
+
+    <script>
+        let quantity = 1;
+        // Get the information from the URL
+        const params = new URLSearchParams(window.location.search);
+
+        // Get product ID
+        const productId = params.get("id");
+
+
+        // Find the selected product
+        const product = products.find(function(item) {
+            return item.id === Number(productId);
+        });
+        const id_url = `http://127.0.0.1:8000/product/${productId}`;
+
+        async function fetch_with_id() {
+            let response = await fetch(id_url);
+            let product = await response.json();
+
+            console.log(product);
+
+            const productDetails = document.getElementById("product-details");
+            const productimmage = document.getElementById("product-image");
+
+            productimmage.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+            `;
+
+            productDetails.innerHTML = `
+                <h2>${product.name}</h2>
+                <p>Rating: ${product.rating}</p>
+                <p>Reviews: ${product.reviews}</p>
+                <p>Category: ${product.category}</p>
+                <p>Price: ₹${product.price}</p>
+                <p id="quantity">${quantity}</p>
+                <button id="decrease">-</button>
+                <button id="add-cart">Add to Cart</button>
+                <button id="increase">+</button>
+            `;
+            const decreaseButton = document.getElementById("decrease");
+            const increaseButton = document.getElementById("increase");
+            const quantityDisplay = document.getElementById("quantity");
+    
+            increaseButton.addEventListener("click", function() {
+                quantity++;
+                quantityDisplay.textContent = quantity;
+            });
+    
+            decreaseButton.addEventListener("click", function() {
+                if (quantity > 1) {
+                    quantity--;
+                    quantityDisplay.textContent = quantity;
+                }
+            });
+            const addCartButton = document.getElementById("add-cart");
+    
+            addCartButton.addEventListener("click", function() {
+    
+                let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+                const existingItem = cart.find(function(item) {
+                    return item.product.id === product.id;
+                });
+    
+                if (existingItem) {
+                    existingItem.quantity+=quantity;
+                }
+                else {
+                    cart.push({
+                        product: product,
+                        quantity: quantity
+                    });
+                }
+    
+                localStorage.setItem("cart", JSON.stringify(cart));
+                window.location.href="cart.html";
+                console.log("Added to cart:", product.name);
+                });
+        }
+
+        fetch_with_id();
+
+
+        // // Display the product
+        // const productDetails = document.getElementById("product-details");
+        // const productimmage=document.getElementById("product-image");
+        // productimmage.innerHTML=`
+        // <img src="${product.image}" alt="${product.name}">`;
+        // productDetails.innerHTML = `
+
+        //     <h2>${product.name}</h2>
+
+        //     <p>Rating:  ${product.rating}</p>
+
+        //     <p>Reviews: ${product.reviews}</p>
+
+        //     <p>Category: ${product.category}</p>
+
+        //     <p>Price: ₹${product.price}</p>
+        //     <p id="quantity">${quantity}</p>
+        //     <button id="decrease">-</button>
+        //     <button id="add-cart">Add to Cart</button>
+        //     <button id="increase">+</button> 
+        // `;
+    </script>
+
+</body>
+
+</html>

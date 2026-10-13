@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+
+    
+</head>
+<body>
+    <div >
+        <h1>order placed sucessfully!</h1>
+        <p id="orderid"></p>
+        <p>Thank you for shopping with ShopeSphere.</p>
+    </div>
+    <style>
+        div {
+            background-color: rgb(184, 188, 188);
+            text-align: center;
+            flex-direction: column;
+            margin-top: 50px;
+            display: flex;
+            gap:50px;
+            align-items: center;
+            border-radius: 50px;
+            box-shadow: 2px 5px 5px;
+        }
+    </style>
+    <script>
+        document.getElementById('orderid').textContent=`Order-ID:${localStorage.getItem("orderId")}`;
+        
+    </script>
+</body>
+</html>
