@@ -19,6 +19,7 @@
             <button id="orderplaced">Placed order</button>
         </div>
     </main>
+    <script src="config.js"></script>
     <script>
         const placedorder=document.getElementById("orderplaced");
         placedorder.addEventListener('click', function(){
@@ -51,7 +52,7 @@
             };
             localStorage.setItem("orderId", orderId);
             
-        fetch("http://127.0.0.1:8000/orders", {
+        fetch(`${API_BASE_URL}/orders`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

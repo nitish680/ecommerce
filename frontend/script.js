@@ -87,7 +87,7 @@ category.addEventListener("change" ,function(){
     
     
 });
-const url = "http://127.0.0.1:8000/products";
+const url = `${API_BASE_URL}/products`;
 
 async function get() {
     let response = await fetch(url);

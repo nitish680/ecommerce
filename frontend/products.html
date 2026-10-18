@@ -68,6 +68,7 @@
     </div>
 
     <!-- Your existing JavaScript -->
+     <script src="config.js"></script>
     <script src="script.js"></script>
 
 
@@ -84,7 +85,7 @@
         const product = products.find(function(item) {
             return item.id === Number(productId);
         });
-        const id_url = `http://127.0.0.1:8000/product/${productId}`;
+        const id_url = `${API_BASE_URL}/product/${productId}`;
 
         async function fetch_with_id() {
             let response = await fetch(id_url);
