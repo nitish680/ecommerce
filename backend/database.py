@@ -9,13 +9,20 @@ load_dotenv()
 import os
 from sqlalchemy.orm import declarative_base#The Base acts as the common foundation for your ORM model classes.
 database_url=os.getenv("DATABASE_URL")
+if database_url:
+    if database_url.startswith("postgresql+psycopg://"):
+        database_url = database_url.replace(
+            "postgresql+psycopg://",
+            "postgresql+psycopg2://",
+            1
+        )
+    elif database_url.startswith("postgresql://"):
+        database_url = database_url.replace(
+            "postgresql://",
+            "postgresql+psycopg2://",
+            1
+        )
 
-if database_url and database_url.startswith("postgresql://"):
-    database_url = database_url.replace(
-        "postgresql://",
-        "postgresql+psycopg2://",
-        1
-    )
 
 engine=create_engine(url=database_url)
 # So whenever we need a database session, we can do:
